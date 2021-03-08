@@ -6,14 +6,14 @@ package ma.sqli.brute.force;
  **/
 public class BruteForceApp {
 
-    UserRepo userRepo = new UserRepo();
+    SecureLogin secureLogin = new SecureLogin();
 
     public String login(String admin, String password) {
-        return userRepo.login(admin, password);
+        return secureLogin.login(admin, password);
     }
 
 
     public void addUser(String admin, String s) {
-        userRepo.addUser(admin, s);
+        secureLogin.signup(admin, s);
     }
 }
