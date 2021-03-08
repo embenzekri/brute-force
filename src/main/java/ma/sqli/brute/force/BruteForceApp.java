@@ -18,32 +18,33 @@ class Login{
 	  }
 	}
 public class BruteForceApp {
-	//int tries = 0;
-	List<Login> users = new ArrayList<Login>();
+	ErrorsPresenter errorsPresenter = new ErrorsPresenter();
+	List<BruteForce> listBruteChecks = new ArrayList<BruteForce>();
+	
     public String login(String admin, String password) {
     	
-    	for(int i = 0; i < users.size();i++) {
-    		if(users.get(i).login == admin ) {
-    			if(users.get(i).islocked) {
-    				return "Multiple erroneous credentials, your account is locked.";
+    	for(int i = 0; i < listBruteChecks.size();i++) {
+    		if(listBruteChecks.get(i).getLogin() == admin ) {
+    			if(listBruteChecks.get(i).isIslocked()) {
+    				return errorsPresenter.BruteForceError();
     			}
-    			if(users.get(i).passWord == password) {
-    				users.get(i).islocked = false;
-    				users.get(i).tries = 0;
+    			if(listBruteChecks.get(i).getPassWord() == password) {
+    				listBruteChecks.get(i).setIslocked(false);
+    				listBruteChecks.get(i).setTries(0);
         			return "Welcome "+ admin +"!";
         		}
-    			users.get(i).tries++;
-    			if(users.get(i).tries >= 3) {
-    				users.get(i).islocked = true;
-    				return "Multiple erroneous credentials, your account is locked.";
+    			listBruteChecks.get(i).setTries(listBruteChecks.get(i).getTries()+1);
+    			if(listBruteChecks.get(i).getTries() >= 3) {
+    				listBruteChecks.get(i).setIslocked(true);
+    				return errorsPresenter.BruteForceError();
     			}
     		}
     		
     	}
-        return "User or password are incorrect.";
+        return errorsPresenter.loginFalseError();
     }
 
     public void addUser(String admin, String s) {
-    	users.add(new Login(admin,s));
+    	listBruteChecks.add(new BruteForce(admin,s));
     }
 }
