@@ -6,11 +6,23 @@ package ma.sqli.brute.force;
  **/
 public class BruteForceApp {
 
-    public String login(String admin, String password) {
-        return "";
+    BruteForceChecker bruteForceChecker;
+    User user = new User();
+    public String login(String username, String password) {
+
+
+        user.setName(username);
+        user.setPassword(password);
+        bruteForceChecker = new BruteForceChecker();
+        return bruteForceChecker.login(user);
+
     }
 
     public void addUser(String admin, String s) {
+        Data.users.put(admin, s);
+    }
+
+    public void shouldLogin(){
 
     }
 }
