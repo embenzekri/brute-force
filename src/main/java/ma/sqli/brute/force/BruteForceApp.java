@@ -7,16 +7,7 @@ import java.util.List;
  * @author : El Mahdi Benzekri
  * @since : 3/7/21, dim.
  **/
-class Login{
-	  String login;
-	  String passWord;
-	  int tries = 0;
-	  boolean islocked=false;
-	  Login(String login,String password){
-		  this.login = login;
-		  this.passWord = password;
-	  }
-	}
+
 public class BruteForceApp {
 	ErrorsPresenter errorsPresenter = new ErrorsPresenter();
 	List<BruteForce> listBruteChecks = new ArrayList<BruteForce>();
