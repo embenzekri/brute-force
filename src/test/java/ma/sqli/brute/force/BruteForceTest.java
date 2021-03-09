@@ -76,4 +76,40 @@ public class BruteForceTest {
 
         assertEquals("Welcome admin!", result3);
     }
+
+    @Test
+    public void shouldNotLoginWhenBlacklisted() {
+        app.blacklist("sqli");
+        String result = app.login("sqli", "0000");
+
+        assertEquals("Your account is blacklisted, contact the CRC to resolve the problem.", result);
+    }
+
+    @Test
+    public void shouldDisplayWarningWhenPasswordWeak() {
+        app.addUser("newuser", "1");
+        String result = app.login("newuser", "1");
+
+        assertEquals("Your password is too weak, please update it by going to your my account.", result);
+    }
+
+    @Test
+    public void shouldDisplayWarningWhenMultipleLogin() {
+        String resultWeb = app.login("admin", "123");
+        String resultAndroid = app.login("admin", "123");
+
+        assertEquals("Welcome admin!", resultWeb);
+        assertEquals("We detected that your account is logged in multiple devices", resultAndroid);
+    }
+
+    @Test
+    public void shouldDisplayWarnings() {
+        app.addUser("newuser", "1");
+        String resultWeb = app.login("newuser", "1");
+        String resultAndroid = app.login("newuser", "1");
+
+        assertEquals("Your password is too weak, please update it by going to your my account.", resultWeb);
+        assertEquals("Your password is too weak, please update it by going to your my account. " +
+                "- We detected that your account is logged in multiple devices", resultAndroid);
+    }
 }
