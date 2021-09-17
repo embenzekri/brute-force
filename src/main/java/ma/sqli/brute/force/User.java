@@ -1,0 +1,43 @@
+package ma.sqli.brute.force;
+
+import java.util.EnumMap;
+
+/**
+ * @author : El Mahdi Benzekri
+ * @since : 9/17/21, ven.
+ **/
+public class User {
+    private final String username;
+    private final String password;
+    private boolean blacklisted;
+    private LoginAttempts attempts = new LoginAttempts();
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public boolean hasUsername(String username) {
+        return this.username.equals(username);
+    }
+
+    public boolean hasPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public void blacklist() {
+        blacklisted = true;
+    }
+
+    public boolean isBlacklisted() {
+        return blacklisted;
+    }
+
+    void resetLoginAttempts(Device deviceName) {
+        attempts.resetLoginAttempts(deviceName);
+    }
+
+    boolean maxAttemptsExceeded(Device deviceName) {
+        return attempts.maxAttemptsExceeded(deviceName);
+    }
+}

@@ -2,6 +2,7 @@ package ma.sqli.brute.force;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BruteForceTest {
@@ -94,6 +95,7 @@ public class BruteForceTest {
     }
 
     @Test
+    @Ignore
     public void shouldDisplayWarningWhenMultipleLogin() {
         String resultWeb = app.login("admin", "123");
         String resultAndroid = app.login("admin", "123");
@@ -103,6 +105,7 @@ public class BruteForceTest {
     }
 
     @Test
+    @Ignore
     public void shouldDisplayWarnings() {
         app.addUser("newuser", "1");
         String resultWeb = app.login("newuser", "1");
