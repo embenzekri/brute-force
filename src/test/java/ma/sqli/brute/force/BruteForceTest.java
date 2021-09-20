@@ -1,10 +1,16 @@
 package ma.sqli.brute.force;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BruteForceTest {
     private BruteForceApp app = new BruteForceApp();
 
@@ -95,21 +101,19 @@ public class BruteForceTest {
     }
 
     @Test
-    @Ignore
     public void shouldDisplayWarningWhenMultipleLogin() {
         String resultWeb = app.login("admin", "123");
-        String resultAndroid = app.login("admin", "123");
+        String resultAndroid = app.loginWithAndroid("admin", "123");
 
         assertEquals("Welcome admin!", resultWeb);
         assertEquals("We detected that your account is logged in multiple devices", resultAndroid);
     }
 
     @Test
-    @Ignore
     public void shouldDisplayWarnings() {
         app.addUser("newuser", "1");
         String resultWeb = app.login("newuser", "1");
-        String resultAndroid = app.login("newuser", "1");
+        String resultAndroid = app.loginWithAndroid("newuser", "1");
 
         assertEquals("Your password is too weak, please update it by going to your my account.", resultWeb);
         assertEquals("Your password is too weak, please update it by going to your my account. " +

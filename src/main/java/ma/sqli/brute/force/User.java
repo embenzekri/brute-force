@@ -1,7 +1,5 @@
 package ma.sqli.brute.force;
 
-import java.util.EnumMap;
-
 /**
  * @author : El Mahdi Benzekri
  * @since : 9/17/21, ven.
@@ -33,11 +31,15 @@ public class User {
         return blacklisted;
     }
 
-    void resetLoginAttempts(Device deviceName) {
-        attempts.resetLoginAttempts(deviceName);
+    public void loggedSuccess(Device deviceName) {
+        attempts.loginSuccess(deviceName);
     }
 
-    boolean maxAttemptsExceeded(Device deviceName) {
+    public boolean maxAttemptsExceeded(Device deviceName) {
         return attempts.maxAttemptsExceeded(deviceName);
+    }
+
+    public boolean isLoggedInMultipleDevices() {
+        return attempts.isLoggedInMultipleDevices();
     }
 }
