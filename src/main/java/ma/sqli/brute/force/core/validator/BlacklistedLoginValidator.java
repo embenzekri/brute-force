@@ -1,9 +1,8 @@
-package ma.sqli.brute.force.validator;
+package ma.sqli.brute.force.core.validator;
 
-import static ma.sqli.brute.force.LoginValidationError.ACCOUNT_BLACKLISTED;
-import ma.sqli.brute.force.Device;
-import ma.sqli.brute.force.User;
-import ma.sqli.brute.force.WarningsCollector;
+import static ma.sqli.brute.force.core.LoginValidationError.ACCOUNT_BLACKLISTED;
+import ma.sqli.brute.force.core.User;
+import ma.sqli.brute.force.core.WarningsCollector;
 
 /**
  * @author : El Mahdi Benzekri
@@ -17,11 +16,11 @@ public class BlacklistedLoginValidator implements LoginValidator {
     }
 
     @Override
-    public boolean validate(User user, String username, String password, Device deviceName, WarningsCollector warnings) {
+    public boolean validate(User user, LoginParams loginParams, WarningsCollector warnings) {
         if (user.isBlacklisted()) {
             warnings.addWarning(ACCOUNT_BLACKLISTED);
             return false;
         }
-        return loginValidator.validate(user, username, password, deviceName, warnings);
+        return loginValidator.validate(user, loginParams, warnings);
     }
 }

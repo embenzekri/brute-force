@@ -1,4 +1,4 @@
-package ma.sqli.brute.force;
+package ma.sqli.brute.force.core;
 
 import java.util.EnumMap;
 import java.util.HashSet;

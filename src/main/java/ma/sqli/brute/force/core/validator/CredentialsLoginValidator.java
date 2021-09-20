@@ -1,9 +1,8 @@
-package ma.sqli.brute.force.validator;
+package ma.sqli.brute.force.core.validator;
 
-import ma.sqli.brute.force.Device;
-import ma.sqli.brute.force.LoginValidationError;
-import ma.sqli.brute.force.User;
-import ma.sqli.brute.force.WarningsCollector;
+import ma.sqli.brute.force.core.LoginValidationError;
+import ma.sqli.brute.force.core.User;
+import ma.sqli.brute.force.core.WarningsCollector;
 
 /**
  * @author : El Mahdi Benzekri
@@ -17,17 +16,17 @@ public class CredentialsLoginValidator implements LoginValidator {
     }
 
     @Override
-    public boolean validate(User user, String username, String password, Device device, WarningsCollector warnings) {
-        if (user.hasPassword(password)) {
-            if (password.length() < 3) {
+    public boolean validate(User user, LoginParams loginParams, WarningsCollector warnings) {
+        if (user.hasPassword(loginParams.getPassword())) {
+            if (loginParams.getPassword().length() < 3) {
                 warnings.addWarning(LoginValidationError.PASSWORD_TOO_WEAK);
             }
 
-            if (user.isLoggedInAnotherDevice(device)) {
+            if (user.isLoggedInAnotherDevice(loginParams.getDevice())) {
                 warnings.addWarning(LoginValidationError.MULTIPLE_DEVICES_LOGIN);
             }
             return true;
         }
-        return loginValidator.validate(user, username, password, device, warnings);
+        return loginValidator.validate(user, loginParams, warnings);
     }
 }

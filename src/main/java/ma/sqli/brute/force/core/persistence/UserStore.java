@@ -1,6 +1,6 @@
-package ma.sqli.brute.force.persistence;
+package ma.sqli.brute.force.core.persistence;
 
-import ma.sqli.brute.force.User;
+import ma.sqli.brute.force.core.User;
 
 import java.util.ArrayList;
 import java.util.List;

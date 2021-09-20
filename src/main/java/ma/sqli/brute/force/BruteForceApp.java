@@ -1,9 +1,15 @@
 package ma.sqli.brute.force;
 
-import static ma.sqli.brute.force.validator.LoginValidator.newValidators;
-import ma.sqli.brute.force.persistence.UserStore;
+import static ma.sqli.brute.force.core.validator.LoginValidator.newValidators;
+import ma.sqli.brute.force.core.Device;
+import ma.sqli.brute.force.core.User;
+import ma.sqli.brute.force.core.WarningsCollector;
+import ma.sqli.brute.force.core.persistence.UserStore;
+import ma.sqli.brute.force.core.validator.LoginParams;
+import ma.sqli.brute.force.presentation.StringWarningPresenter;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author : El Mahdi Benzekri
@@ -32,11 +38,15 @@ public class BruteForceApp {
         }
 
         WarningsCollector warnings = new WarningsCollector();
-        boolean canLogin = newValidators().validate(user.get(), username, password, deviceName, warnings);
+        boolean canLogin = newValidators().validate(user.get(), new LoginParams(username, password, deviceName), warnings);
         if (canLogin) {
             user.get().loggedSuccess(deviceName);
         }
-        return warnings.buildResponse(canLogin, username);
+        if (canLogin && warnings.getWarnings().isEmpty()) {
+            return String.format("Welcome %s!", username);
+        }
+        StringWarningPresenter presenter = new StringWarningPresenter();
+        return warnings.getWarnings().stream().map(presenter::present).collect(Collectors.joining(" - "));
     }
 
     public void blacklist(String username) {
