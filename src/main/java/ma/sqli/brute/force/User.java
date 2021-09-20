@@ -39,7 +39,7 @@ public class User {
         return attempts.maxAttemptsExceeded(deviceName);
     }
 
-    public boolean isLoggedInMultipleDevices() {
-        return attempts.isLoggedInMultipleDevices();
+    public boolean isLoggedInAnotherDevice(Device device) {
+        return attempts.isLoggedInAnotherDevice(device);
     }
 }

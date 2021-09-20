@@ -1,14 +1,15 @@
 package ma.sqli.brute.force.validator;
 
+import static ma.sqli.brute.force.LoginValidationError.ACCOUNT_BLACKLISTED;
 import ma.sqli.brute.force.Device;
 import ma.sqli.brute.force.User;
+import ma.sqli.brute.force.WarningsCollector;
 
 /**
  * @author : El Mahdi Benzekri
  * @since : 9/17/21, ven.
  **/
 public class BlacklistedLoginValidator implements LoginValidator {
-    public static final String ACCOUNT_BLACKLISTED = "Your account is blacklisted, contact the CRC to resolve the problem.";
     private final LoginValidator loginValidator;
 
     public BlacklistedLoginValidator(LoginValidator loginValidator) {
@@ -16,10 +17,11 @@ public class BlacklistedLoginValidator implements LoginValidator {
     }
 
     @Override
-    public String validate(User user, String username, String password, Device deviceName) {
+    public boolean validate(User user, String username, String password, Device deviceName, WarningsCollector warnings) {
         if (user.isBlacklisted()) {
-            return ACCOUNT_BLACKLISTED;
+            warnings.addWarning(ACCOUNT_BLACKLISTED);
+            return false;
         }
-        return loginValidator.validate(user, username, password, deviceName);
+        return loginValidator.validate(user, username, password, deviceName, warnings);
     }
 }

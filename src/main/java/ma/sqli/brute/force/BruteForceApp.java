@@ -1,7 +1,6 @@
 package ma.sqli.brute.force;
 
 import static ma.sqli.brute.force.validator.LoginValidator.newValidators;
-
 import ma.sqli.brute.force.persistence.UserStore;
 
 import java.util.Optional;
@@ -32,7 +31,12 @@ public class BruteForceApp {
             return USER_OR_PASSWORD_ARE_INCORRECT;
         }
 
-        return newValidators().validate(user.get(), username, password, deviceName);
+        WarningsCollector warnings = new WarningsCollector();
+        boolean canLogin = newValidators().validate(user.get(), username, password, deviceName, warnings);
+        if (canLogin) {
+            user.get().loggedSuccess(deviceName);
+        }
+        return warnings.buildResponse(canLogin, username);
     }
 
     public void blacklist(String username) {

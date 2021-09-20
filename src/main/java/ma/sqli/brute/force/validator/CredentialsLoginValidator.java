@@ -1,20 +1,15 @@
 package ma.sqli.brute.force.validator;
 
-import static java.lang.String.format;
 import ma.sqli.brute.force.Device;
+import ma.sqli.brute.force.LoginValidationError;
 import ma.sqli.brute.force.User;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import ma.sqli.brute.force.WarningsCollector;
 
 /**
  * @author : El Mahdi Benzekri
  * @since : 9/17/21, ven.
  **/
 public class CredentialsLoginValidator implements LoginValidator {
-    public static final String WELCOME_ADMIN = "Welcome %s!";
-    public static final String PASSWORD_TOO_WEAK = "Your password is too weak, please update it by going to your my account.";
     private final LoginValidator loginValidator;
 
     public CredentialsLoginValidator(LoginValidator loginValidator) {
@@ -22,18 +17,17 @@ public class CredentialsLoginValidator implements LoginValidator {
     }
 
     @Override
-    public String validate(User user, String username, String password, Device deviceName) {
+    public boolean validate(User user, String username, String password, Device device, WarningsCollector warnings) {
         if (user.hasPassword(password)) {
-            List<String> warnings = new ArrayList<>();
             if (password.length() < 3) {
-                warnings.add(PASSWORD_TOO_WEAK);
+                warnings.addWarning(LoginValidationError.PASSWORD_TOO_WEAK);
             }
-            user.loggedSuccess(deviceName);
-            if (user.isLoggedInMultipleDevices()) {
-                warnings.add("We detected that your account is logged in multiple devices");
+
+            if (user.isLoggedInAnotherDevice(device)) {
+                warnings.addWarning(LoginValidationError.MULTIPLE_DEVICES_LOGIN);
             }
-            return warnings.isEmpty() ? format(WELCOME_ADMIN, username) : warnings.stream().collect(Collectors.joining(" - "));
+            return true;
         }
-        return loginValidator.validate(user, username, password, deviceName);
+        return loginValidator.validate(user, username, password, device, warnings);
     }
 }

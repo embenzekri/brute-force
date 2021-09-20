@@ -2,13 +2,14 @@ package ma.sqli.brute.force.validator;
 
 import ma.sqli.brute.force.Device;
 import ma.sqli.brute.force.User;
+import ma.sqli.brute.force.WarningsCollector;
 
 /**
  * @author : El Mahdi Benzekri
  * @since : 9/17/21, ven.
  **/
 public interface LoginValidator {
-    String validate(User user, String username, String password, Device deviceName);
+    boolean validate(User user, String username, String password, Device deviceName, WarningsCollector warnings);
 
     static LoginValidator newValidators() {
         LoginValidator incorrectPasswordValidator = new IncorrectPasswordValidator();

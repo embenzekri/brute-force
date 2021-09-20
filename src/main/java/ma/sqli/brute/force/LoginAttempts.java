@@ -32,7 +32,7 @@ public class LoginAttempts {
         return false;
     }
 
-    public boolean isLoggedInMultipleDevices() {
-        return loggedInDevices.size() > 1;
+    public boolean isLoggedInAnotherDevice(Device device) {
+        return loggedInDevices.size() > 0 && !(loggedInDevices.iterator().next() == device);
     }
 }
