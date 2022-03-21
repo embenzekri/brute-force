@@ -19,8 +19,9 @@ public class BruteForceApp {
             }else{
                 //reset number of tries
                 tries = 0;
-//                if(user.getMessage() != null){
-//                    return user.getMessage();
+//                String message = user.getMessage();
+//                if(message.equals("")){
+//                    return message;
 //                }
                 return "Welcome " + user.getName() + "!";
             }
@@ -39,8 +40,11 @@ public class BruteForceApp {
     public void addUser(String username, String password) {
         User user = new User(username, password);
         if(password.length() < 2){
-            user.addMessage("Your password is too weak, please update it by going to your my account.");
+            user.setMessage("Your password is too weak, please update it by going to your my account.");
+        }else{
+            user.setMessage("");
         }
+
         this.users.addUser(user);
     }
 
