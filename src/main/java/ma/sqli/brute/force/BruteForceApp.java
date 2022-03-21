@@ -9,7 +9,6 @@ import ma.sqli.brute.force.model.User;
  * @since : 3/7/21, dim.
  **/
 public class BruteForceApp {
-    private final int NB_LOGIN_ATTEMPT = 2;
 
     private DAOUsers daoUsers = new DAOUsers();
 
@@ -24,7 +23,7 @@ public class BruteForceApp {
             user.resetNbLoginAttempt();
             return "Welcome "+username+"!";
         }else{
-            if (isNbLoginAttemptreached(user)){
+            if (user.isNbLoginAttemptreached()){
                 return "Multiple erroneous credentials, your account is locked.";
             }else{
                 user.increaseNbLoginAttempt();
@@ -34,19 +33,8 @@ public class BruteForceApp {
 
 
     }
-    public boolean isNbLoginAttemptreached(LoginAttempt user){
-        if (user.getNbLoginAttempt()>=NB_LOGIN_ATTEMPT){
-            return true;
-        }
-        return false;
-    }
 
-    public boolean isNbLoginAndroidAttemptreached(LoginAttempt user){
-        if (user.getNbAndroidLoginAttempt()>=NB_LOGIN_ATTEMPT){
-            return true;
-        }
-        return false;
-    }
+
 
 
     public String loginWithAndroid(String username, String password) {
@@ -56,7 +44,7 @@ public class BruteForceApp {
             user.resetNbAndroidLoginAttempt();;
             return "Welcome "+username+"!";
         }else{
-            if (isNbLoginAndroidAttemptreached(user)){
+            if (user.isNbLoginAndroidAttemptreached()){
                 return "Multiple erroneous credentials, your account is locked.";
             }else{
                 user.increaseNbAndroidLoginAttempt();

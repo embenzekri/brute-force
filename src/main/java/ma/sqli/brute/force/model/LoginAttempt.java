@@ -2,7 +2,7 @@ package ma.sqli.brute.force.model;
 
 
 public class LoginAttempt extends User{
-    
+    private final int NB_LOGIN_ATTEMPT = 2;
     private int nbLoginAttempt =0;
     private int nbAndroidLoginAttempt =0;
 
@@ -10,10 +10,6 @@ public class LoginAttempt extends User{
         super(user.getUsername(), user.getPassword());
     }
 
-    public int getNbLoginAttempt(){
-        return  nbLoginAttempt;
-    }
-    public int getNbAndroidLoginAttempt(){return nbAndroidLoginAttempt;}
     public void increaseNbLoginAttempt(){
         nbLoginAttempt++;
     }
@@ -25,5 +21,17 @@ public class LoginAttempt extends User{
     }
     public void resetNbAndroidLoginAttempt(){
         nbAndroidLoginAttempt=0;
+    }
+    public boolean isNbLoginAttemptreached() {
+        if (nbLoginAttempt >= NB_LOGIN_ATTEMPT) {
+            return true;
+        }
+        return false;
+    }
+    public boolean isNbLoginAndroidAttemptreached(){
+        if (nbAndroidLoginAttempt>=NB_LOGIN_ATTEMPT){
+            return true;
+        }
+        return false;
     }
 }
