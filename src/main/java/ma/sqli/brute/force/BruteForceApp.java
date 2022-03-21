@@ -1,6 +1,8 @@
 package ma.sqli.brute.force;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,21 +12,21 @@ import java.util.Map;
 public class BruteForceApp {
 
     Map<String, String> AddedUsers = new HashMap<>();
-    Map<String, String> loggedInUsers = new HashMap<>();
+    List<String> loggedInUsers = new ArrayList<>();
     String result = "";
 
     public String login(String username, String password) {
 
         if (AddedUsers.get(username).equals(password)) {
             result = "Welcome " + username + "!";
-            loggedInUsers.remove(username);
-        } else if (loggedInUsers.containsKey(username)) {
+            //loggedInUsers.remove(username);
+        } else if (loggedInUsers.contains(username)) {
             result = "Multiple erroneous credentials, your account is locked.";
         } else {
             result = "User or password are incorrect.";
         }
 
-        loggedInUsers.put(username, password);
+        loggedInUsers.add(username);
 
         return result;
     }

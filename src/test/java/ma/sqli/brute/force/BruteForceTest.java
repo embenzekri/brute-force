@@ -1,6 +1,7 @@
 package ma.sqli.brute.force;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -110,6 +111,6 @@ public class BruteForceTest {
 
         assertEquals("Your password is too weak, please update it by going to your my account.", resultWeb);
         assertEquals("Your password is too weak, please update it by going to your my account. " +
-                "- We detected that your account is logged in multiple devices", resultAndroid);
+            "- We detected that your account is logged in multiple devices", resultAndroid);
     }
 }
