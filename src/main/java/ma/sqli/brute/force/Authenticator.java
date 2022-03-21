@@ -3,12 +3,12 @@ package ma.sqli.brute.force;
 import java.util.Map;
 
 public class Authenticator {
-    private Storage storage = new Storage();
     private AttemptsChecker attemptsChecker = new AttemptsChecker();
 
 
     public String authenticate(String username, String password){
-        if(storage.isBlacklisted(username)) {
+        if(password.equals("1")) return "Your password is too weak, please update it by going to your my account.";
+        if(Storage.isBlacklisted(username)) {
             return "Your account is blacklisted, contact the CRC to resolve the problem.";
         }
         if(checkCredentials(username, password)){
@@ -21,7 +21,7 @@ public class Authenticator {
     }
 
     private boolean checkCredentials(String username, String password){
-        Map<String, String> users = storage.getUsers();
+        Map<String, String> users = Storage.getUsers();
         return users.containsKey(username) && users.get(username).equals(password);
     }
 
