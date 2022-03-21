@@ -14,15 +14,14 @@ public class BruteForceApp {
         User user = users.getUser(new User(username, password));
 
         if( user != null ){
-            if(!blacklist(username)){
+            if(user.isBlackList()){
                 return "Your account is blacklisted, contact the CRC to resolve the problem.";
             }else{
                 //reset number of tries
                 tries = 0;
-                String s = user.getMessage();
-                if(user.getMessage() != ""){
-                    return user.getMessage();
-                }
+//                if(user.getMessage() != null){
+//                    return user.getMessage();
+//                }
                 return "Welcome " + user.getName() + "!";
             }
 
@@ -40,7 +39,7 @@ public class BruteForceApp {
     public void addUser(String username, String password) {
         User user = new User(username, password);
         if(password.length() < 2){
-            user.setMessage("Your password is too weak, please update it by going to your my account.");
+            user.addMessage("Your password is too weak, please update it by going to your my account.");
         }
         this.users.addUser(user);
     }
