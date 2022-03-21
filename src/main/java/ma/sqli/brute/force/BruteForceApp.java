@@ -16,8 +16,10 @@ public class BruteForceApp {
     String result = "";
 
     public String login(String username, String password) {
-
-        if (AddedUsers.get(username).equals(password)) {
+        if(password.length() < 2) {
+            result = "Your password is too weak, please update it by going to your my account.";
+        }
+        else if (AddedUsers.get(username).equals(password)) {
             result = "Welcome " + username + "!";
             //loggedInUsers.remove(username);
         } else if (loggedInUsers.contains(username)) {
