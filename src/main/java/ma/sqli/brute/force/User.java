@@ -3,6 +3,7 @@ package ma.sqli.brute.force;
 public class User {
     private String username;
     private String password;
+    private Attempt loginAttempts;
 
     public User(String username, String password){
         this.username = username;
@@ -16,7 +17,4 @@ public class User {
     public String getUsername() {
         return username;
     }
-
-
-
 }
