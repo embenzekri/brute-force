@@ -24,7 +24,7 @@ public class BruteForceTest {
     public void shouldNotLoginWhenWrongCredentials() {
         String result = app.login("admin", "qsd");
 
-        assertEquals("User or password are incorrect.", result);
+            assertEquals("User or password are incorrect.", result);
     }
 
     @Test
