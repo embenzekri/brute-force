@@ -79,7 +79,7 @@ public class BruteForceTest {
 
     @Test
     public void shouldNotLoginWhenBlacklisted() {
-        app.blacklist("sqli");
+       app.blacklist("sqli");
         String result = app.login("sqli", "0000");
 
         assertEquals("Your account is blacklisted, contact the CRC to resolve the problem.", result);
