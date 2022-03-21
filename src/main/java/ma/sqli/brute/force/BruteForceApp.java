@@ -47,6 +47,7 @@ public class BruteForceApp {
     public boolean blacklist(String username){
         User user = this.users.getUserByUsername(username);
         if( user != null ){
+            user.setBlackList(true);
             return true;
         }
         return false;
