@@ -1,49 +1,57 @@
 package ma.sqli.brute.force.Model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ma.sqli.brute.force.Storage.UserStorage;
 
 public class Login {
-    private String name;
-    private String password;
-    private boolean isBlocked;
-    private int counter;
+
+    private Map<String,Integer> attempts=new HashMap<>();
     private final UserStorage userStorage;
 
 
-    public Login(String name, String password,UserStorage userStorage) {
-        this.name = name;
-        this.password = password;
-        this.isBlocked = false;
+    public Login(UserStorage userStorage) {
         this.userStorage = userStorage;
-        counter=0;
+
+
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public boolean isBlocked() {
-        return isBlocked;
-    }
 
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
-    public String login(){
-        if(isBlocked() ||counter==3){
-            isBlocked=true;
-            return  "Multiple erroneous credentials, your account is locked.";
+    public String attempt(User user){
+        if(attempts.containsKey(user.getName())){
+            Integer count=attempts.get(user.getName());
+
+
+                User _user=this.userStorage.loadUser(user.getName());
+                if(_user==null || _user.getPassword()!=user.getPassword()){
+                    attempts.put(user.getName(),count+1);
+                    if(count>=2){
+                        return  "Multiple erroneous credentials, your account is locked.";
+                    }
+                    return "User or password are incorrect.";
+                }
+                attempts.put(user.getName(),0);
+                return "Welcome "+_user.getName()+"!";
+
+
         }
         else {
-            User user=this.userStorage.loadUser(name);
-            if(user==null || user.getPassword()!=password) return "User or password are incorrect.";
-            if(user.getName().equals("admin")) return "Welcome admin!";
-            return "Welcome !";
+            User _user=this.userStorage.loadUser(user.getName());
+            if(_user==null || _user.getPassword()!=user.getPassword()){
+                attempts.put(user.getName(),1);
+                return "User or password are incorrect.";
+            }
+            attempts.put(user.getName(),0);
+
+            return "Welcome "+_user.getName()+"!";
         }
+
+
+
+
 
 
     }

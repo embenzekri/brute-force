@@ -12,17 +12,18 @@ import ma.sqli.brute.force.Storage.UserStorage;
 public class BruteForceApp implements BruteForce{
 
     private final UserStorage userStorage;
+    private final Login login;
 
     public BruteForceApp() {
         this.userStorage=new UserStorage();
+        this.login=new Login(userStorage);
 
     }
 
     @Override
     public String login(String username, String password) {
-        Login newLogiAttempt=new Login(username,password,userStorage);
-
-        return  newLogiAttempt.login();
+        User user= new User(username,password);
+        return  login.attempt(user);
 
 
 
