@@ -8,13 +8,17 @@ import java.util.List;
  * @since : 3/7/21, dim.
  **/
 public class BruteForceApp {
+
+    private static final String WRONG_CREDENTIALS = "User or password are incorrect.";
+    private static final String PASSWORD_WEAK = "Your password is too weak, please update it by going to your my account.";
     List<User> userList = new ArrayList<>();
     List<String> blackList = new ArrayList<>();
 
 
     public String login(String username, String password) {
+
         if(passwordWeak(password))
-            return "Your password is too weak, please update it by going to your my account.";
+            return PASSWORD_WEAK;
         if(!this.blackList.contains(username)) {
             for (User user : userList) {
                 if (user.equalsUserName(username) && user.equalsPassword(password)) {
@@ -25,7 +29,7 @@ public class BruteForceApp {
                     user.setAttempt(user.getAttempt()+1);
             }
 
-            return "User or password are incorrect.";
+            return WRONG_CREDENTIALS;
         } else {
 
             return "Your account is blacklisted, contact the CRC to resolve the problem.";
