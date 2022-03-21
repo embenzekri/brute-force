@@ -1,22 +1,26 @@
 package ma.sqli.brute.force;
 
+import static java.util.Arrays.asList;
+import static ma.sqli.brute.force.core.LoginValidationError.USER_OR_PASSWORD_ARE_INCORRECT;
 import static ma.sqli.brute.force.core.validator.LoginValidator.newValidators;
+import static ma.sqli.brute.force.presentation.StringWarningPresenter.errorPresenter;
+import static ma.sqli.brute.force.presentation.StringWarningPresenter.successPresenter;
 import ma.sqli.brute.force.core.Device;
 import ma.sqli.brute.force.core.User;
+import ma.sqli.brute.force.core.WarningPresenter;
 import ma.sqli.brute.force.core.WarningsCollector;
 import ma.sqli.brute.force.core.persistence.UserStore;
 import ma.sqli.brute.force.core.validator.LoginParams;
 import ma.sqli.brute.force.presentation.StringWarningPresenter;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author : El Mahdi Benzekri
  * @since : 3/7/21, dim.
  **/
 public class BruteForceApp {
-    public static final String USER_OR_PASSWORD_ARE_INCORRECT = "User or password are incorrect.";
     private UserStore userStore = new UserStore();
 
     public void addUser(String username, String password) {
@@ -34,7 +38,7 @@ public class BruteForceApp {
     private String doLogin(String username, String password, Device deviceName) {
         Optional<User> user = userStore.findUser(username);
         if (!user.isPresent()) {
-            return USER_OR_PASSWORD_ARE_INCORRECT;
+            return errorPresenter(username).present(asList(USER_OR_PASSWORD_ARE_INCORRECT));
         }
 
         WarningsCollector warnings = new WarningsCollector();
@@ -42,11 +46,8 @@ public class BruteForceApp {
         if (canLogin) {
             user.get().loggedSuccess(deviceName);
         }
-        if (canLogin && warnings.getWarnings().isEmpty()) {
-            return String.format("Welcome %s!", username);
-        }
-        StringWarningPresenter presenter = new StringWarningPresenter();
-        return warnings.getWarnings().stream().map(presenter::present).collect(Collectors.joining(" - "));
+        StringWarningPresenter presenter = canLogin && !warnings.hasWarnings() ? successPresenter(username) : errorPresenter(username);
+        return warnings.present(presenter);
     }
 
     public void blacklist(String username) {
