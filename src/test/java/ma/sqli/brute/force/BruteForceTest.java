@@ -77,7 +77,7 @@ public class BruteForceTest {
         assertEquals("Welcome admin!", result3);
     }
 
-    @Test
+   @Test
     public void shouldNotLoginWhenBlacklisted() {
         app.blacklist("sqli");
         String result = app.login("sqli", "0000");
