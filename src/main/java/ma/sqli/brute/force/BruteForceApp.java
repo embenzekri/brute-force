@@ -1,50 +1,69 @@
 package ma.sqli.brute.force;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * @author : El Mahdi Benzekri
- * @since : 3/7/21, dim.
- **/
+
 public class BruteForceApp {
-
     private Map<String, String> usernameAndPasswords = new HashMap<>();
+    private Map<DeviceEnum, UserLoginAttempts> attemptsByDevice;
+    private Set<String> loggedInUsers = new HashSet<>();
 
-    private Map<Device, Map<String, Integer>> LoginErrorsByDevice = new HashMap<>();
-    private Map<String, Integer> loginErrorsByUsername = new HashMap<>();
-    private Map<String, Integer> loginErrorsByUsernameAndroid = new HashMap<>();
+    public BruteForceApp() {
+        this.attemptsByDevice = new HashMap<>();
+        this.attemptsByDevice.put(DeviceEnum.WEB, new UserLoginAttempts());
+        this.attemptsByDevice.put(DeviceEnum.ANDROID, new UserLoginAttempts());
+    }
 
     public String login(String username, String password) {
-        if (isValidCredentials(username, password)) {
-            resetErrorsCount(username, loginErrorsByUsername);
-            return String.format("Welcome %s!", username);
-        } else if (loginErrorsByUsername.get(username) >= 2) {
-            return "Multiple erroneous credentials, your account is locked.";
-        } else {
-            incrementErrorsCount(username, loginErrorsByUsername);
-            return "User or password are incorrect.";
-        }
+        return loginWithDevice(username, password, DeviceEnum.WEB)
+                .stream()
+                .collect(Collectors.joining(" - "));
     }
 
     public String loginWithAndroid(String username, String password) {
-        if (isValidCredentials(username, password)) {
-            resetErrorsCount(username, loginErrorsByUsernameAndroid);
-            return String.format("Welcome %s!", username);
-        } else if (loginErrorsByUsernameAndroid.get(username) >= 2) {
-            return "Multiple erroneous credentials, your account is locked.";
+        return loginWithDevice(username, password, DeviceEnum.ANDROID)
+                .stream()
+                .collect(Collectors.joining(" - "));
+    }
+
+    private List<String> loginWithDevice(String username, String password, DeviceEnum deviceEnum) {
+        List<String> warnings = new ArrayList<>();
+
+        if (getAttemptsforDevice(deviceEnum).isBlacklisted(username)) {
+            loggedInUsers.remove(username);
+            warnings.add("Your account is blacklisted, contact the CRC to resolve the problem.");
+        } else if (isValidCredentials(username, password)) {
+            getAttemptsforDevice(deviceEnum).resetAttemptsForUser(username);
+            if (loggedInUsers.contains(username)) {
+                warnings.add("We detected that your account is logged in multiple devices");
+            } else {
+                loggedInUsers.add(username);
+                if (password.length() < 2) {
+                    warnings.add("Your password is too weak, please update it by going to your my account.");
+                } else {
+                    warnings.add(String.format("Welcome %s!", username));
+                }
+            }
+
+        } else if (getAttemptsforDevice(deviceEnum).isMaxloginErrorsExceeded(username)) {
+            loggedInUsers.remove(username);
+            warnings.add("Multiple erroneous credentials, your account is locked.");
         } else {
-            incrementErrorsCount(username, loginErrorsByUsernameAndroid);
-            return "User or password are incorrect.";
+            getAttemptsforDevice(deviceEnum).loginErrorForUser(username);
+            loggedInUsers.remove(username);
+            warnings.add("User or password are incorrect.");
         }
+        return warnings;
     }
 
-    private void resetErrorsCount(String username, Map<String, Integer> loginErrorsByUsername) {
-        loginErrorsByUsername.put(username, 0);
-    }
-
-    private void incrementErrorsCount(String username, Map<String, Integer> loginErrorsByUsername) {
-        loginErrorsByUsername.put(username, loginErrorsByUsername.get(username) + 1);
+    private UserLoginAttempts getAttemptsforDevice(DeviceEnum deviceEnum) {
+        return attemptsByDevice.get(deviceEnum);
     }
 
     private boolean isValidCredentials(String username, String password) {
@@ -54,15 +73,12 @@ public class BruteForceApp {
 
     public void addUser(String username, String password) {
         usernameAndPasswords.put(username, password);
-        if (!loginErrorsByUsername.containsKey(username)) {
-            resetErrorsCount(username, loginErrorsByUsername);
-        }
-        if (!loginErrorsByUsernameAndroid.containsKey(username)) {
-            resetErrorsCount(username, loginErrorsByUsernameAndroid);
-        }
+        getAttemptsforDevice(DeviceEnum.WEB).registerUser(username);
+        getAttemptsforDevice(DeviceEnum.ANDROID).registerUser(username);
     }
 
-    public void blacklist(String sqli) {
-
+    public void blacklist(String username) {
+        getAttemptsforDevice(DeviceEnum.WEB).blacklist(username);
+        getAttemptsforDevice(DeviceEnum.ANDROID).blacklist(username);
     }
 }

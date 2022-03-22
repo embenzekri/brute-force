@@ -96,7 +96,7 @@ public class BruteForceTest {
     @Test
     public void shouldDisplayWarningWhenMultipleLogin() {
         String resultWeb = app.login("admin", "123");
-        String resultAndroid = app.login("admin", "123");
+        String resultAndroid = app.loginWithAndroid("admin", "123");
 
         assertEquals("Welcome admin!", resultWeb);
         assertEquals("We detected that your account is logged in multiple devices", resultAndroid);
@@ -106,7 +106,7 @@ public class BruteForceTest {
     public void shouldDisplayWarnings() {
         app.addUser("newuser", "1");
         String resultWeb = app.login("newuser", "1");
-        String resultAndroid = app.login("newuser", "1");
+        String resultAndroid = app.loginWithAndroid("newuser", "1");
 
         assertEquals("Your password is too weak, please update it by going to your my account.", resultWeb);
         assertEquals("Your password is too weak, please update it by going to your my account. " +
