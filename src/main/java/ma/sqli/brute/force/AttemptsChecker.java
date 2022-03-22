@@ -5,11 +5,12 @@ import java.util.Map;
 
 public class AttemptsChecker {
 
-    private Storage storage = new Storage();
-    private Map<String, Integer> wrongAttempts = new HashMap<>();
+    private Map<String, Integer> wrongAttemptsWeb = new HashMap<>();
+    private Map<String, Integer> wrongAttemptsAndroid = new HashMap<>();
 
 
-    private int wrongAttempts(String username){
+    private int wrongAttempts(String username, Device device ){
+        Map<String, Integer> wrongAttempts = getWrongAttemptsByDevice(device);
         if(!wrongAttempts.containsKey(username)) {
             wrongAttempts.put(username, 1);
             return 1;
@@ -19,8 +20,8 @@ public class AttemptsChecker {
         return wrongAttemptsTotal;
     }
 
-    public String checkAttempts(String username){
-        int attempts = wrongAttempts(username);
+    public String checkAttempts(String username, Device device){
+        int attempts = wrongAttempts(username, device);
         if(attempts < 3) {
             return "User or password are incorrect.";
         } else {
@@ -29,7 +30,15 @@ public class AttemptsChecker {
 
     }
 
-    public void resetAttempts(String username) {
-        wrongAttempts.put(username, 0);
+    public void resetAttempts(String username, Device device) {
+        if(device == Device.WEB) {
+            wrongAttemptsWeb.put(username, 0);
+        } else {
+            wrongAttemptsAndroid.put(username, 0);
+        }
+    }
+
+    private Map<String, Integer> getWrongAttemptsByDevice(Device device) {
+        return device == Device.WEB ? wrongAttemptsWeb : wrongAttemptsAndroid;
     }
 }

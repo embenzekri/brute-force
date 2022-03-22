@@ -1,9 +1,7 @@
 package ma.sqli.brute.force;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author : El Mahdi Benzekri
@@ -11,11 +9,10 @@ import java.util.Set;
  **/
 public class BruteForceApp {
     private Authenticator authenticator = new Authenticator();
-    private Set<String> authenticatedUsers = new HashSet<>();
+    private List<String> authenticatedUsers = new LinkedList<>();
 
     public String login(String username, String password) {
-        //if(authenticatedUsers.contains(username)) return "We detected that your account is logged in multiple devices";
-        String result = authenticator.authenticate(username, password);
+        String result = authenticator.authenticate(username, password, Device.WEB);
         authenticatedUsers.add(username);
         return result;
     }
@@ -25,8 +22,7 @@ public class BruteForceApp {
     }
 
     public String loginWithAndroid(String username, String password) {
-        //if(authenticatedUsers.contains(username)) return "We detected that your account is logged in multiple devices";
-        String result = authenticator.authenticate(username, password);
+        String result = authenticator.authenticate(username, password, Device.ANDROID);
         authenticatedUsers.add(username);
         return result;
     }

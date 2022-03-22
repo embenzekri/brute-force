@@ -6,16 +6,16 @@ public class Authenticator {
     private AttemptsChecker attemptsChecker = new AttemptsChecker();
 
 
-    public String authenticate(String username, String password){
+    public String authenticate(String username, String password, Device device){
         if(password.equals("1")) return "Your password is too weak, please update it by going to your my account.";
         if(Storage.isBlacklisted(username)) {
             return "Your account is blacklisted, contact the CRC to resolve the problem.";
         }
         if(checkCredentials(username, password)){
-            attemptsChecker.resetAttempts(username);
+            attemptsChecker.resetAttempts(username, device);
             return "Welcome " + username + "!";
         } else {
-            String result = attemptsChecker.checkAttempts(username);
+            String result = attemptsChecker.checkAttempts(username, device);
             return result;
         }
     }

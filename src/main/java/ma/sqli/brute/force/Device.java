@@ -1,6 +1,6 @@
 package ma.sqli.brute.force;
 
-public enum Devices {
+public enum Device {
     WEB,
     ANDROID
 }
