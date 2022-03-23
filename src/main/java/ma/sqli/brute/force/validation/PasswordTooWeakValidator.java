@@ -7,7 +7,7 @@ public class PasswordTooWeakValidator implements LoginValidator {
 
     public String validate(LoginParams loginParams,
                            WarningsCollector warnings) {
-        if (loginParams.passwordLengthHigherThan(MIN_LENGTH)) {
+        if (loginParams.passwordLengthLowerThan(MIN_LENGTH)) {
             warnings.addWarning("Your password is too weak, please update it by going to your my account.");
         }
         return "";

@@ -8,7 +8,7 @@ import java.util.Set;
  * @author : El Mahdi Benzekri
  * @since : 22/03/2022, mar.
  **/
-public class MultipleLoginValidator implements LoginValidator {
+public class MultipleDeviceLoginValidator implements LoginValidator {
     private Set<String> loggedInUsers = new HashSet<>();
 
     public String validate(LoginParams loginParams, WarningsCollector warnings) {

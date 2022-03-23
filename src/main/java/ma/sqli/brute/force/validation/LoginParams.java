@@ -13,8 +13,8 @@ public class LoginParams {
         this.deviceEnum = deviceEnum;
     }
 
-    public boolean passwordLengthHigherThan(int length) {
-        return password.length() > length;
+    public boolean passwordLengthLowerThan(int length) {
+        return password.length() < length;
     }
 
     public DeviceEnum getDeviceEnum() {

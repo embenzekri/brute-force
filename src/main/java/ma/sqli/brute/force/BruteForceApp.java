@@ -1,12 +1,16 @@
 package ma.sqli.brute.force;
 
+import ma.sqli.brute.force.validation.LoginParams;
+import ma.sqli.brute.force.validation.LoginValidator;
+import ma.sqli.brute.force.validation.LoginValidatorFactory;
+import ma.sqli.brute.force.validation.WarningsCollector;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class BruteForceApp {
@@ -21,20 +25,22 @@ public class BruteForceApp {
     }
 
     public String login(String username, String password) {
-        return loginWithDevice(username, password, DeviceEnum.WEB)
-                .stream()
-                .collect(Collectors.joining(" - "));
+        return loginWithDevice(username, password, DeviceEnum.WEB);
     }
 
     public String loginWithAndroid(String username, String password) {
-        return loginWithDevice(username, password, DeviceEnum.ANDROID)
-                .stream()
-                .collect(Collectors.joining(" - "));
+        return loginWithDevice(username, password, DeviceEnum.ANDROID);
     }
 
-    private List<String> loginWithDevice(String username, String password, DeviceEnum deviceEnum) {
-        List<String> warnings = new ArrayList<>();
+    private String loginWithDevice(String username, String password, DeviceEnum deviceEnum) {
 
+        LoginValidator validator = new LoginValidatorFactory().createValidators(usernameAndPasswords,loggedInUsers, attemptsByDevice);
+        return validator.validate(new LoginParams(username, password, deviceEnum), new WarningsCollector());
+    }
+
+
+    private List<String> oldLoginWithDevice(String username, String password, DeviceEnum deviceEnum) {
+        List<String> warnings = new ArrayList<>();
         if (getAttemptsforDevice(deviceEnum).isBlacklisted(username)) {
             loggedInUsers.remove(username);
             warnings.add("Your account is blacklisted, contact the CRC to resolve the problem.");
